@@ -1,0 +1,53 @@
+{
+  "name": "dsh-tlock",
+  "version": "0.2.1",
+  "description": "T约束 —— 每轮生成的 token / 时间双闸：到量即断、超时即断，并自动把已生成内容归档到桌面",
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "cordis",
+    "cordis-plugin",
+    "token",
+    "limit",
+    "budget",
+    "timeout",
+    "限额",
+    "T约束"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "main": "lib/index.mjs",
+  "exports": {
+    ".": "./lib/index.mjs",
+    "./client": "./lib/client.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE"
+  ],
+  "author": {
+    "name": "T约束"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/FenrisGe-RIS/dsh-tlock.git"
+  },
+  "homepage": "https://github.com/FenrisGe-RIS/dsh-tlock#readme",
+  "bugs": {
+    "url": "https://github.com/FenrisGe-RIS/dsh-tlock/issues"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web"
+    }
+  }
+}

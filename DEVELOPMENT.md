@@ -1,0 +1,64 @@
+# T约束 · dsh-tlock
+
+每轮生成的 **token / 时间双闸**：到量即断、超时即断，并自动把已生成内容归档到桌面。
+
+- 版本：0.2.1
+- 形态：DSH 插件（宿主 `lib/index.mjs` + Web 客户端 `lib/client.js`）+ Windows 桌面控制台 `TLock.exe`
+- 两处共享同一份设置：`%USERPROFILE%\.dsh\storages\dsh-tlock\settings.json`
+
+## 一、装在哪
+
+| 位置 | 内容 |
+| --- | --- |
+| `~/.dsh/plugins/dsh-tlock` | 插件源目录（`tools/sync.sh` 的第一目标） |
+| `~/.dsh/profiles/desktop/node_modules/dsh-tlock` | 已安装副本（`file:` 依赖，pnpm 硬链接，需要单独同步） |
+| `%LOCALAPPDATA%\TLock\TLock.exe` | 桌面控制台（开始菜单里有「T约束」快捷方式） |
+| `~/.dsh/storages/dsh-tlock/` | `settings.json` / `status.json` / `commands.json` / `history.json` |
+
+改完代码同步：`tlock/tools/sync.sh`。宿主侧代码与客户端 bundle 都要 **重启 DSH**（或等 HMR）才生效。
+
+## 二、两处入口
+
+1. **DSH 里**：右下角的黑色方块悬浮球（只在 DSH 页面里出现，不在桌面）。点一下开面板，可拖动，位置会记住。
+   - 「约束模式」页：token 滑条（5 千 ~ 100 万）、时间滑条（1 分 ~ 2 小时）、归档模式。
+   - 「查看历史归档记录」页：每一轮结束后的归档列表。
+   - 「设置」页：插件开关、悬浮球、开机自启、页面大小、语言、打开归档目录。
+2. **桌面**：`TLock.exe`（托盘常驻），同样能改滑条/归档模式，负责开机自启和「打开归档目录」。
+
+## 三、滑条
+
+- 两个滑条都是黑色的；**用量进度条是绿色**。
+- 6 个整点把滑条均分成 5 段，刻度正好落在 1/5、2/5、3/5、4/5 上；拖到刻度附近会**自动吸附**。
+- token 整点：5 千 / 5 万 / 20 万 / 40 万 / 70 万 / 100 万；时间整点：1 / 10 / 30 分钟、1 / 1.5 / 2 小时。
+- 「手动输入」可以填任意值（token 单位千、时间单位分钟），自动夹进量程。
+
+## 四、归档
+
+开关在「约束模式 → 归档」，或点「解除归档」。
+
+| 模式 | 文件 | 给谁看 |
+| --- | --- | --- |
+| 简洁描述 | `生成说明.md` | 人：一眼知道这轮在说什么、动了哪些文件、几段代码 |
+| AI联动分析 | `AI联动分析.md` | 模型：完整思考 + 正文 + 代码片段，整份复制给你的模型 |
+| 两个都要 | 上面两份 + `meta.json` | — |
+
+目录：`<桌面>\DSH限定生成内容\{token限定版|时间限定版|手动结束}\<YYYYMMDD-HHmmss>_<会话标题>\`。
+时间闸里「一轮」从你按下发送开始算，包含中间调工具的时间。
+
+## 五、到量之后
+
+- 80% / 90% 会先提示（可在设置里关掉阈值）。
+- 到量：立刻 `agent.cancel({kind:'hook'})` 硬断 → 已生成内容先存一份快照 → 面板显示「到量，已硬断」。
+- 「继续生成」：额度清零，接着原会话往下写；「结束本轮」：这一轮收尾。
+
+## 六、开发
+
+```bash
+node test/sim.mjs     # 假 ctx + 假 agent 的 42 项断言
+node tools/sync.sh    # 同步到插件目录和已安装副本
+```
+
+- `lib/index.mjs`：宿主插件（只依赖 node 内置模块，不引 `@deepseek-ai/*`，避免 peer 依赖被 0.2.x 升级打断）。
+- `lib/client.js`：Web 客户端，手写 CJS（`window.__ModuleLoader__.load`），不写 JSX、不装构建链。
+- `app/TLock.cs`：单文件 WinForms，C# 5，用系统自带 `csc.exe` 编译。
+- `tools/make-icon.cs`：图标生成器（斜向锁链 + 棱角 T，七档 ICO）。

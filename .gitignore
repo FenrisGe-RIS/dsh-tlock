@@ -1,0 +1,29 @@
+# 依赖与产物
+node_modules/
+dist/
+*.zip
+
+# 编译产物
+*.exe
+*.pdb
+*.obj
+
+# 截图与调试残留
+app/shot-*.png
+app/probe*.txt
+*.bak-tlock
+*.bak-v1
+
+# 一次性补丁脚本
+patch_*.py
+
+# 系统垃圾
+Thumbs.db
+desktop.ini
+.DS_Store
+.tmp-state/
+
+# 发布辅助产物
+tools/files.txt
+tools/.rel.json
+repo.json
