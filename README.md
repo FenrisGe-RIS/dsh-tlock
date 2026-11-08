@@ -73,7 +73,7 @@ T约束 就是那道闸：
 
 ```bash
 # 安装（从 GitHub 拉取，推荐）
-dsh plugin --profile desktop add https://codeload.github.com/FenrisGe-RIS/dsh-tlock/tar.gz/v0.3.1
+dsh plugin --profile desktop add https://codeload.github.com/FenrisGe-RIS/dsh-tlock/tar.gz/v0.3.2
 
 # 也可以直接下压缩包，双击 安装.bat
 # https://github.com/FenrisGe-RIS/dsh-tlock/releases/latest
@@ -173,6 +173,7 @@ V1 没做这个口径——按宿主回报的 `outputTokens` 统一计。需要�
 
 ## 更新日志
 
+- **0.3.2** — 修掉归档详情反复弹「改名字失败」：读取失败不再每 2 秒重试一次、也不再冒充重命名失败，失败时直接在面板里说明原因
 - **0.3.1** — 移除独立的桌面控制台（`TLock.exe`）；面板已是唯一入口，安装包更小、少一个常驻进程
 - **0.3.0** — 归档体检：面板内直接浏览归档内容（深色主题、可切换文件）、支持重命名归档与文件；「AI联动分析」换成「归档完全记录」（一字不落，含工具参数与返回）；简洁描述新增「这份省略了什么」；默认推荐完全记录
 - **0.2.2** — 修「打开归档目录」按钮无效（面板走 /open 专用路由，宿主 /cmd 也接受 open）
@@ -183,7 +184,7 @@ V1 没做这个口径——按宿主回报的 `outputTokens` 统一计。需要�
 
 ## 元信息
 
-- 包名：`dsh-tlock`　显示名：**T约束**　版本：`0.3.1`
+- 包名：`dsh-tlock`　显示名：**T约束**　版本：`0.3.2`
 - 形态：DSH 插件（宿主 `lib/index.mjs` + Web 客户端 `lib/client.js`），无独立桌面程序
 - 许可：MIT　运行环境：DSH ≥ 0.2.1，Node ≥ 22
 - 依赖：无（不引入任何三方运行时依赖）

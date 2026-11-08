@@ -206,7 +206,7 @@ V1 没做这个口径——按宿主回报的 `outputTokens` 统一计。需要�
 
 ## 元信息
 
-- 包名：`dsh-tlock`　显示名：**T约束**　版本：`0.3.1`
+- 包名：`dsh-tlock`　显示名：**T约束**　版本：`0.3.2`
 - 形态：DSH 插件（宿主 `lib/index.mjs` + Web 客户端 `lib/client.js`），无独立桌面程序
 - 许可：MIT　运行环境：DSH ≥ 0.2.1，Node ≥ 22
 - 依赖：无（不引入任何三方运行时依赖）
@@ -220,7 +220,7 @@ V1 没做这个口径——按宿主回报的 `outputTokens` 统一计。需要�
 - [ ] `files` 已包含 `lib`、`cordis.patch.yml`、`README.md` ✓
 - [ ] 仓库里放 `app/icon-preview.png`（256×256）当市场页封面
 - [ ] 打 tag：`git tag v0.2.1 && git push --tags`
-- [ ] 按 tag 装一遍验证：`dsh plugin --profile web add https://codeload.github.com/<owner>/dsh-tlock/tar.gz/v0.3.1`
+- [ ] 按 tag 装一遍验证：`dsh plugin --profile web add https://codeload.github.com/<owner>/dsh-tlock/tar.gz/v0.3.2`
       （用 tarball 而不是 `github:` —— pnpm ≥ 10 会因 prepare 脚本拦下 git 依赖）
 - [ ] 不需要 `allowBuilds` 授权：包内没有 build 脚本
 - [ ] 装完确认 DSH 右下角出现悬浮球、`/dsh-tlock/health` 返回 `{"ok":true,"version":"0.2.1"}`
