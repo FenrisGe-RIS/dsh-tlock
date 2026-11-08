@@ -69,19 +69,11 @@ T约束 就是那道闸：
 
 点「确认约束」→ 开启并弹出面板；不想开 → **再按一次 Enter 直接发送**。再也不会"忘了开闸就让它狂写"。
 
-### 6. 桌面控制台（可选）
-
-`TLock.exe` 常驻托盘，不打开 DSH 也能拉滑条、切归档模式、进归档目录；默认开机自启，可在设置里关掉。
-
-它和 DSH 里的面板**共用同一份设置文件**，两边改都一样。
-
----
-
 ## 快速上手
 
 ```bash
 # 安装（从 GitHub 拉取，推荐）
-dsh plugin --profile desktop add https://codeload.github.com/FenrisGe-RIS/dsh-tlock/tar.gz/v0.3.0
+dsh plugin --profile desktop add https://codeload.github.com/FenrisGe-RIS/dsh-tlock/tar.gz/v0.3.1
 
 # 也可以直接下压缩包，双击 安装.bat
 # https://github.com/FenrisGe-RIS/dsh-tlock/releases/latest
@@ -137,7 +129,7 @@ dsh plugin --profile desktop add file:C:/path/to/dsh-tlock
 | `archiveMode` | `brief` | `brief` / `full` / `both`（旧值 `ai` 自动升级为 `full`） |
 | `warnPct` | `[0.8, 0.9]` | 预警阈值 |
 | `ball` | `true` | DSH 内悬浮球 |
-| `autoStart` | `true` | 桌面控制台开机自启 |
+| `autoStart` | `true` | 开机自启（保留字段，桌面控制台已移除） |
 | `panelSize` | `m` | 面板尺寸 `s` / `m` / `l` |
 | `lang` | `zh` | `zh` / `en` |
 
@@ -181,6 +173,7 @@ V1 没做这个口径——按宿主回报的 `outputTokens` 统一计。需要�
 
 ## 更新日志
 
+- **0.3.1** — 移除独立的桌面控制台（`TLock.exe`）；面板已是唯一入口，安装包更小、少一个常驻进程
 - **0.3.0** — 归档体检：面板内直接浏览归档内容（深色主题、可切换文件）、支持重命名归档与文件；「AI联动分析」换成「归档完全记录」（一字不落，含工具参数与返回）；简洁描述新增「这份省略了什么」；默认推荐完全记录
 - **0.2.2** — 修「打开归档目录」按钮无效（面板走 /open 专用路由，宿主 /cmd 也接受 open）
 - **0.2.1** — 英文界面完整化（K/M 单位、所有提示中英双语）、滑条 + 吸附、三种归档模式、历史记录页、DSH 悬浮球、输入前拦截、设置页、斜链锁 T 图标、开场动效（已按反馈移除）、桌面控制台重做
@@ -190,8 +183,8 @@ V1 没做这个口径——按宿主回报的 `outputTokens` 统一计。需要�
 
 ## 元信息
 
-- 包名：`dsh-tlock`　显示名：**T约束**　版本：`0.3.0`
-- 形态：DSH 插件（宿主 + Web 客户端）+ Windows 桌面控制台
+- 包名：`dsh-tlock`　显示名：**T约束**　版本：`0.3.1`
+- 形态：DSH 插件（宿主 `lib/index.mjs` + Web 客户端 `lib/client.js`），无独立桌面程序
 - 许可：MIT　运行环境：DSH ≥ 0.2.1，Node ≥ 22
 - 依赖：无（不引入任何三方运行时依赖）
 

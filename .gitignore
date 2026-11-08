@@ -30,3 +30,5 @@ repo.json
 patch_*.py
 .tmp-state/
 tools/.rel.json
+rel-body-*.md
+tools/.msg.txt

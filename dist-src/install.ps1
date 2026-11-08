@@ -166,22 +166,6 @@ try {
   exit 1
 }
 
-# ── 7. 可选：桌面控制台 ─────────────────────────────────────────
-$deskExe = Join-Path $src 'desktop\TLock.exe'
-if (Test-Path $deskExe) {
-  $deskDir = Join-Path $env:LOCALAPPDATA 'TLock'
-  try {
-    if (-not (Test-Path $deskDir)) { New-Item -ItemType Directory -Path $deskDir -Force | Out-Null }
-    Copy-Item $deskExe (Join-Path $deskDir 'TLock.exe') -Force
-    $ico = Join-Path $src 'desktop\icon.ico'
-    if (Test-Path $ico) { Copy-Item $ico (Join-Path $deskDir 'icon.ico') -Force }
-    Ok ("桌面控制台已放到 " + (Join-Path $deskDir 'TLock.exe') + "（可选，双击即可）")
-  } catch {
-    Warn ("桌面控制台没复制成功（可能正在运行）：" + $_.Exception.Message)
-    Warn ("可以手动把 desktop\TLock.exe 复制到 " + $deskDir)
-  }
-}
-
 Say ""
 Say "=============================================="
 Ok "装好了。现在【完全退出 DSH 再重新打开】"

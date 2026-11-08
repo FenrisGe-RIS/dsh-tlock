@@ -5,11 +5,10 @@ cd "$(dirname "$0")/.."
 V=$(node -p "require('./package.json').version")
 OUT="dist/dsh-tlock-$V"
 rm -rf "$OUT" "dist/dsh-tlock-$V.zip"
-mkdir -p "$OUT/lib" "$OUT/app" "$OUT/desktop"
+mkdir -p "$OUT/lib" "$OUT/assets"
 cp package.json cordis.patch.yml README.md MARKETPLACE.md LICENSE "$OUT/"
 cp lib/index.mjs lib/client.js "$OUT/lib/"
-cp app/icon.ico app/icon-preview.png "$OUT/app/"
-cp app/TLock.exe app/icon.ico "$OUT/desktop/"
+cp assets/icon.ico "$OUT/assets/"
 cp dist-src/install.ps1 dist-src/安装.bat dist-src/使用说明.txt "$OUT/"
 python - "$OUT" "$V" <<'PY'
 import os, sys, zipfile

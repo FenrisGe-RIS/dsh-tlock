@@ -35,16 +35,7 @@ token 到量就断、时间到点就断，断下来的内容自动存到桌面�
 · 设置页：插件开关、悬浮球开关、开机自启、页面大小、语言（中文 / English）。
 
 
-三、可选：桌面控制台
-----------------------------------------
-安装脚本会把 TLock.exe 放到：
-    %LOCALAPPDATA%\TLock\TLock.exe
-
-双击它，托盘会常驻一个小图标，不打开 DSH 也能改限额、开归档目录。
-它和 DSH 里的面板共用同一份设置，改哪边都一样。
-
-
-四、设置存在哪
+三、设置存在哪
 ----------------------------------------
     %USERPROFILE%\.dsh\storages\dsh-tlock\
         settings.json   你的限额与开关
@@ -53,15 +44,15 @@ token 到量就断、时间到点就断，断下来的内容自动存到桌面�
 删掉整个目录 = 恢复默认，不影响 DSH 本身。
 
 
-五、卸
+四、卸
 ----------------------------------------
-1. 关掉 DSH 和 TLock.exe。
+1. 关掉 DSH。
 2. 打开你的 profile 目录（一般是 %USERPROFILE%\.dsh\profiles\desktop\）：
    - 删掉 node_modules\dsh-tlock
    - 打开 package.json，把 dependencies 里的 "dsh-tlock" 和
      dsh.profile.bundles 里的 "dsh-tlock" 删掉
 3. 想清干净再删 %USERPROFILE%\.dsh\plugins\dsh-tlock 和
-   %USERPROFILE%\.dsh\storages\dsh-tlock，以及 %LOCALAPPDATA%\TLock。
+   %USERPROFILE%\.dsh\storages\dsh-tlock。
 
 
 六、常见问题
@@ -84,4 +75,4 @@ Q: 会不会影响我原来的对话？
 
 Q: 支持 Mac / Linux 吗？
    插件本体（lib/*.js）是纯 Node 代码，理论上跨平台；
-   但安装脚本和桌面控制台是 Windows 的。
+   但安装脚本是 Windows 的。

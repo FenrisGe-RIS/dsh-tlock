@@ -21,7 +21,7 @@
 
 **一句话简介（中文，≤120 字）**
 
-> DeepSeek Harness 插件：T约束 —— 每轮生成的 token / 时间双闸，到量即断、超时即断，断下的内容自动归档到桌面（简洁描述 / AI联动分析两种视角），支持 DSH 内悬浮球面板与桌面控制台。
+> DeepSeek Harness 插件：T约束 —— 每轮生成的 token / 时间双闸，到量即断、超时即断，断下的内容自动归档到桌面（简洁描述 / 归档完全记录两种视角），DSH 内悬浮球面板即可完成全部操作。
 
 **One-liner (EN, ≤200 chars)**
 
@@ -98,14 +98,6 @@ T约束 就是那道闸：
 
 点「确认约束」→ 开启并弹出面板；不想开 → **再按一次 Enter 直接发送**。再也不会"忘了开闸就让它狂写"。
 
-### 6. 桌面控制台（可选）
-
-`TLock.exe` 常驻托盘，不打开 DSH 也能拉滑条、切归档模式、进归档目录；默认开机自启，可在设置里关掉。
-
-它和 DSH 里的面板**共用同一份设置文件**，两边改都一样。
-
----
-
 ## 快速上手
 
 ```bash
@@ -163,7 +155,7 @@ dsh plugin --profile desktop add file:C:/path/to/dsh-tlock
 | `archiveMode` | `brief` | `brief` / `full` / `both`（旧值 `ai` 自动升级为 `full`） |
 | `warnPct` | `[0.8, 0.9]` | 预警阈值 |
 | `ball` | `true` | DSH 内悬浮球 |
-| `autoStart` | `true` | 桌面控制台开机自启 |
+| `autoStart` | `true` | 开机自启（保留字段，桌面控制台已移除） |
 | `panelSize` | `m` | 面板尺寸 `s` / `m` / `l` |
 | `lang` | `zh` | `zh` / `en` |
 
@@ -214,8 +206,8 @@ V1 没做这个口径——按宿主回报的 `outputTokens` 统一计。需要�
 
 ## 元信息
 
-- 包名：`dsh-tlock`　显示名：**T约束**　版本：`0.3.0`
-- 形态：DSH 插件（宿主 + Web 客户端）+ Windows 桌面控制台
+- 包名：`dsh-tlock`　显示名：**T约束**　版本：`0.3.1`
+- 形态：DSH 插件（宿主 `lib/index.mjs` + Web 客户端 `lib/client.js`），无独立桌面程序
 - 许可：MIT　运行环境：DSH ≥ 0.2.1，Node ≥ 22
 - 依赖：无（不引入任何三方运行时依赖）
 
@@ -228,9 +220,8 @@ V1 没做这个口径——按宿主回报的 `outputTokens` 统一计。需要�
 - [ ] `files` 已包含 `lib`、`cordis.patch.yml`、`README.md` ✓
 - [ ] 仓库里放 `app/icon-preview.png`（256×256）当市场页封面
 - [ ] 打 tag：`git tag v0.2.1 && git push --tags`
-- [ ] 按 tag 装一遍验证：`dsh plugin --profile web add https://codeload.github.com/<owner>/dsh-tlock/tar.gz/v0.3.0`
+- [ ] 按 tag 装一遍验证：`dsh plugin --profile web add https://codeload.github.com/<owner>/dsh-tlock/tar.gz/v0.3.1`
       （用 tarball 而不是 `github:` —— pnpm ≥ 10 会因 prepare 脚本拦下 git 依赖）
 - [ ] 不需要 `allowBuilds` 授权：包内没有 build 脚本
 - [ ] 装完确认 DSH 右下角出现悬浮球、`/dsh-tlock/health` 返回 `{"ok":true,"version":"0.2.1"}`
-- [ ] 桌面控制台单独分发（`TLock.exe`），市场页注明「Windows 可选组件」
 
