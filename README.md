@@ -80,7 +80,7 @@ T约束 就是那道闸：
 
 ```bash
 # 安装（从 GitHub 拉取，推荐）
-dsh plugin --profile desktop add https://codeload.github.com/FenrisGe-RIS/dsh-tlock/tar.gz/v0.2.1
+dsh plugin --profile desktop add https://codeload.github.com/FenrisGe-RIS/dsh-tlock/tar.gz/v0.2.2
 
 # 也可以直接下压缩包，双击 安装.bat
 # https://github.com/FenrisGe-RIS/dsh-tlock/releases/latest
@@ -179,6 +179,7 @@ V1 没做这个口径——按宿主回报的 `outputTokens` 统一计。需要�
 
 ## 更新日志
 
+- **0.2.2** — 修「打开归档目录」按钮无效（面板走 /open 专用路由，宿主 /cmd 也接受 open）
 - **0.2.1** — 英文界面完整化（K/M 单位、所有提示中英双语）、滑条 + 吸附、三种归档模式、历史记录页、DSH 悬浮球、输入前拦截、设置页、斜链锁 T 图标、开场动效（已按反馈移除）、桌面控制台重做
 - **0.1.0** — 双闸核心、桌面归档、悬浮提示
 
@@ -186,7 +187,7 @@ V1 没做这个口径——按宿主回报的 `outputTokens` 统一计。需要�
 
 ## 元信息
 
-- 包名：`dsh-tlock`　显示名：**T约束**　版本：`0.2.1`
+- 包名：`dsh-tlock`　显示名：**T约束**　版本：`0.2.2`
 - 形态：DSH 插件（宿主 + Web 客户端）+ Windows 桌面控制台
 - 许可：MIT　运行环境：DSH ≥ 0.2.1，Node ≥ 22
 - 依赖：无（不引入任何三方运行时依赖）

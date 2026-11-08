@@ -1,6 +1,6 @@
 {
   "name": "dsh-tlock",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "T约束 —— 每轮生成的 token / 时间双闸：到量即断、超时即断，并自动把已生成内容归档到桌面",
   "keywords": [
     "dsh",

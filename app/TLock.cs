@@ -974,7 +974,10 @@ class MainForm : Form
         try
         {
             Directory.CreateDirectory(root);
-            Process.Start("explorer.exe", "\"" + root + "\"");
+            ProcessStartInfo psi = new ProcessStartInfo("explorer.exe");
+            psi.Arguments = "\"" + root + "\"";
+            psi.UseShellExecute = true;
+            Process.Start(psi);
         }
         catch (Exception error)
         {
