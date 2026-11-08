@@ -12,7 +12,6 @@
 | --- | --- |
 | `~/.dsh/plugins/dsh-tlock` | 插件源目录（`tools/sync.sh` 的第一目标） |
 | `~/.dsh/profiles/desktop/node_modules/dsh-tlock` | 已安装副本（`file:` 依赖，pnpm 硬链接，需要单独同步） |
-| `%LOCALAPPDATA%\TLock\TLock.exe` | 桌面控制台（开始菜单里有「T约束」快捷方式） |
 | `~/.dsh/storages/dsh-tlock/` | `settings.json` / `status.json` / `commands.json` / `history.json` |
 
 改完代码同步：`tlock/tools/sync.sh`。宿主侧代码与客户端 bundle 都要 **重启 DSH**（或等 HMR）才生效。
@@ -59,5 +58,4 @@ node tools/sync.sh    # 同步到插件目录和已安装副本
 
 - `lib/index.mjs`：宿主插件（只依赖 node 内置模块，不引 `@deepseek-ai/*`，避免 peer 依赖被 0.2.x 升级打断）。
 - `lib/client.js`：Web 客户端，手写 CJS（`window.__ModuleLoader__.load`），不写 JSX、不装构建链。
-- `app/TLock.cs`：单文件 WinForms，C# 5，用系统自带 `csc.exe` 编译。
 - `tools/make-icon.cs`：图标生成器（斜向锁链 + 棱角 T，七档 ICO）。
