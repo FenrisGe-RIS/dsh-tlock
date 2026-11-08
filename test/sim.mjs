@@ -309,14 +309,14 @@ console.log('dsh-tlock sim\n')
 // 6 ─ 结束本轮 / 归档格式 ────────────────────────────────────────────────
 {
   const h = harness()
-  h.rt.applySettings({ tokenLimit: 10, archiveMode: 'ai' })
+  h.rt.applySettings({ tokenLimit: 10, archiveMode: 'full' })
   h.emit('turn/start', { turn: 1 })
   h.assistantMessage('只有 ai', { outputTokens: 20 })
-  check('ai 模式下只写 AI联动分析.md（外加 meta.json）', () => {
+  check('full 模式下只写 完整记录.md + 完整记录.json（外加 meta.json）', () => {
     const folder = h.folders()[0]
-    assert.ok(fs.existsSync(path.join(folder, 'AI联动分析.md')))
+    assert.ok(fs.existsSync(path.join(folder, '完整记录.md')))
     assert.ok(!fs.existsSync(path.join(folder, '生成说明.md')))
-    const md = fs.readFileSync(path.join(folder, 'AI联动分析.md'), 'utf8')
+    const md = fs.readFileSync(path.join(folder, '完整记录.md'), 'utf8')
     assert.ok(md.includes('只有 ai'))
     assert.ok(md.includes('完整思考过程'))
   })
@@ -441,10 +441,11 @@ console.log('dsh-tlock sim\n')
   h.emit('turn/start', { turn: 1 })
   h.emit('session/title', { title: '双份归档' })
   h.assistantMessage('## 小标题\n正文在这里', { outputTokens: 20, reasoning: '想一想' })
-  check('both 模式同时写两份 markdown + meta.json', () => {
+  check('both 模式同时写两份 markdown + 完整记录.json + meta.json', () => {
     const folder = h.folders()[0]
     assert.ok(fs.existsSync(path.join(folder, '生成说明.md')))
-    assert.ok(fs.existsSync(path.join(folder, 'AI联动分析.md')))
+    assert.ok(fs.existsSync(path.join(folder, '完整记录.md')))
+    assert.ok(fs.existsSync(path.join(folder, '完整记录.json')))
     assert.ok(fs.existsSync(path.join(folder, 'meta.json')))
   })
   check('简洁描述里出现小标题骨架', () => {
@@ -453,7 +454,7 @@ console.log('dsh-tlock sim\n')
     assert.ok(md.includes('小标题'))
   })
   check('AI 联动分析里有完整思考', () => {
-    const md = fs.readFileSync(path.join(h.folders()[0], 'AI联动分析.md'), 'utf8')
+    const md = fs.readFileSync(path.join(h.folders()[0], '完整记录.md'), 'utf8')
     assert.ok(md.includes('想一想'))
   })
   check('history.json 记录了这一次归档', () => {
@@ -484,10 +485,10 @@ console.log('dsh-tlock sim\n')
 // 15 ─ V2：设置写回与量程收敛 ──────────────────────────────────────────
 {
   const h = harness()
-  h.rt.applySettings({ archiveMode: 'ai', lang: 'en', ball: false, panelSize: 'l' })
+  h.rt.applySettings({ archiveMode: 'full', lang: 'en', ball: false, panelSize: 'l' })
   check('设置写回 settings.json 并可读回', () => {
     const saved = JSON.parse(fs.readFileSync(h.settingsFile, 'utf8'))
-    assert.equal(saved.archiveMode, 'ai')
+    assert.equal(saved.archiveMode, 'full')
     assert.equal(saved.lang, 'en')
     assert.equal(saved.ball, false)
     assert.equal(saved.panelSize, 'l')
@@ -499,7 +500,7 @@ console.log('dsh-tlock sim\n')
     assert.equal(status.settings.timeMinSec, 60)
     assert.equal(status.settings.timeMaxSec, 7200)
     assert.equal(status.settings.archiveEnabled, true)
-    assert.equal(status.settings.archiveMode, 'ai')
+    assert.equal(status.settings.archiveMode, 'full')
   })
   h.cleanup()
 }
@@ -541,10 +542,10 @@ console.log('dsh-tlock sim\n')
   })
 
   await checkAsync('POST /set 改设置并立刻生效', async () => {
-    const r = await call('POST', '/dsh-tlock/set', { tokenLimit: 123456, archiveMode: 'ai', lang: 'en' })
+    const r = await call('POST', '/dsh-tlock/set', { tokenLimit: 123456, archiveMode: 'full', lang: 'en' })
     assert.equal(r.code, 200)
     assert.equal(r.json.settings.tokenLimit, 123456)
-    assert.equal(r.json.settings.archiveMode, 'ai')
+    assert.equal(r.json.settings.archiveMode, 'full')
     assert.equal(r.json.settings.lang, 'en')
   })
 
@@ -565,6 +566,51 @@ console.log('dsh-tlock sim\n')
     const r = await call('GET', '/dsh-tlock/health')
     assert.equal(r.code, 200)
     assert.equal(r.json.ok, true)
+  })
+
+  // 先造一份归档，再验证「面板内浏览 + 重命名」这两条路由
+  h.rt.applySettings({ enabled: true, tokenLimit: 10, archiveEnabled: true, archiveMode: 'full' })
+  h.frame({ type: 'text-delta', text: '字'.repeat(200) })
+  const firstFolder = h.folders()[0]
+
+  await checkAsync('GET /archive 能读出归档内容', async () => {
+    const r = await call('GET', '/dsh-tlock/archive?path=' + encodeURIComponent(firstFolder))
+    assert.equal(r.code, 200)
+    assert.equal(r.json.ok, true)
+    const names = r.json.files.map((file) => file.name)
+    assert.ok(names.includes('完整记录.md'))
+    const md = r.json.files.find((file) => file.name === '完整记录.md')
+    assert.ok(md.text.includes('归档完全记录'))
+  })
+
+  await checkAsync('GET /archive 拒绝归档根目录外的路径', async () => {
+    const r = await call('GET', '/dsh-tlock/archive?path=' + encodeURIComponent('C:/Windows'))
+    assert.equal(r.json.ok, false)
+    assert.equal(r.json.code, 'outside-root')
+  })
+
+  await checkAsync('POST /rename 保留时间前缀改目录名', async () => {
+    const r = await call('POST', '/dsh-tlock/rename', { path: firstFolder, title: '新名字' })
+    assert.equal(r.json.ok, true)
+    assert.ok(fs.existsSync(r.json.path))
+    assert.ok(path.basename(r.json.path).endsWith('_新名字'))
+    const history = JSON.parse(fs.readFileSync(h.rt._files.historyFile, 'utf8'))
+    assert.equal(history.items[0].path, r.json.path)
+  })
+
+  await checkAsync('POST /rename 拒绝空名字', async () => {
+    const target = h.folders()[0]
+    const r = await call('POST', '/dsh-tlock/rename', { path: target, title: '   ' })
+    assert.equal(r.json.ok, false)
+    assert.equal(r.json.code, 'empty-title')
+  })
+
+  await checkAsync('POST /rename 改文件名', async () => {
+    const folder = h.folders()[0]
+    const r = await call('POST', '/dsh-tlock/rename', { path: folder, file: '完整记录.md', name: '全文' })
+    assert.equal(r.json.ok, true)
+    assert.ok(fs.existsSync(path.join(folder, '全文.md')))
+    assert.ok(!fs.existsSync(path.join(folder, '完整记录.md')))
   })
 
   h.cleanup()

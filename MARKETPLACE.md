@@ -74,7 +74,7 @@ T约束 就是那道闸：
 | 模式 | 产出 | 适合 |
 | --- | --- | --- |
 | **简洁描述** | `生成说明.md`：这轮在说什么、内容骨架、动过哪些文件、几段代码、正文 | 人看，扫一眼就知道写了什么 |
-| **AI联动分析** | `AI联动分析.md`：完整思考过程 + 正文 + 代码片段 | 整份复制给你自己的模型，让它判断哪段重要 |
+| **归档完全记录**（推荐） | `完整记录.md` + `完整记录.json`：完整思考过程、全部工具参数与返回、正文原文 | 想一字不落地回看/喂模型，选这个 |
 | **两个都要** | 上面两份 + `meta.json` | 既要存档又要喂模型 |
 
 不想要归档？点「解除归档」，到量照样断，只是不写文件。
@@ -86,6 +86,7 @@ T约束 就是那道闸：
 面板三个页签：
 
 - **约束模式** —— 滑条、归档模式、本轮进度、继续/结束
+- **查看历史归档记录** —— 面板里直接读归档内容、重命名、在文件夹中显示
 - **查看历史归档记录** —— 每一次断档的清单，点开直接定位文件夹
 - **设置** —— 插件开关、悬浮球开关、开机自启、页面大小、语言（中文 / English）、打开归档目录
 
@@ -126,7 +127,8 @@ dsh plugin --profile desktop add file:C:/path/to/dsh-tlock
 ```
 桌面\DSH限定生成内容\token限定版\20261107-214503_重构登录模块\
 ├── 生成说明.md      # 人看的
-├── AI联动分析.md    # 喂模型的
+├── 完整记录.md      # 一字不落（推荐）
+├── 完整记录.json    # 同上，程序读取用
 └── meta.json        # 机器读的（用量、耗时、模型、限制）
 ```
 
@@ -158,7 +160,7 @@ dsh plugin --profile desktop add file:C:/path/to/dsh-tlock
 | `tokenLimit` | `20000` | 每轮 token 上限（5000 ~ 1000000） |
 | `timeLimitSec` | `300` | 每轮时间上限（60 ~ 7200 秒） |
 | `archiveEnabled` | `true` | 是否归档 |
-| `archiveMode` | `brief` | `brief` / `ai` / `both` |
+| `archiveMode` | `brief` | `brief` / `full` / `both`（旧值 `ai` 自动升级为 `full`） |
 | `warnPct` | `[0.8, 0.9]` | 预警阈值 |
 | `ball` | `true` | DSH 内悬浮球 |
 | `autoStart` | `true` | 桌面控制台开机自启 |
@@ -212,7 +214,7 @@ V1 没做这个口径——按宿主回报的 `outputTokens` 统一计。需要�
 
 ## 元信息
 
-- 包名：`dsh-tlock`　显示名：**T约束**　版本：`0.2.2`
+- 包名：`dsh-tlock`　显示名：**T约束**　版本：`0.3.0`
 - 形态：DSH 插件（宿主 + Web 客户端）+ Windows 桌面控制台
 - 许可：MIT　运行环境：DSH ≥ 0.2.1，Node ≥ 22
 - 依赖：无（不引入任何三方运行时依赖）
@@ -226,7 +228,7 @@ V1 没做这个口径——按宿主回报的 `outputTokens` 统一计。需要�
 - [ ] `files` 已包含 `lib`、`cordis.patch.yml`、`README.md` ✓
 - [ ] 仓库里放 `app/icon-preview.png`（256×256）当市场页封面
 - [ ] 打 tag：`git tag v0.2.1 && git push --tags`
-- [ ] 按 tag 装一遍验证：`dsh plugin --profile web add https://codeload.github.com/<owner>/dsh-tlock/tar.gz/v0.2.2`
+- [ ] 按 tag 装一遍验证：`dsh plugin --profile web add https://codeload.github.com/<owner>/dsh-tlock/tar.gz/v0.3.0`
       （用 tarball 而不是 `github:` —— pnpm ≥ 10 会因 prepare 脚本拦下 git 依赖）
 - [ ] 不需要 `allowBuilds` 授权：包内没有 build 脚本
 - [ ] 装完确认 DSH 右下角出现悬浮球、`/dsh-tlock/health` 返回 `{"ok":true,"version":"0.2.1"}`

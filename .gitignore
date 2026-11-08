@@ -27,3 +27,6 @@ desktop.ini
 tools/files.txt
 tools/.rel.json
 repo.json
+patch_*.py
+.tmp-state/
+tools/.rel.json

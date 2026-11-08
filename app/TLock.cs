@@ -596,7 +596,8 @@ class MainForm : Form
         get
         {
             string mode = Json.Str(settings["archiveMode"], "brief");
-            if (mode != "brief" && mode != "ai" && mode != "both") mode = "brief";
+            if (mode == "ai") mode = "full";
+            if (mode != "brief" && mode != "full" && mode != "both") mode = "brief";
             return mode;
         }
         set { settings["archiveMode"] = value; SaveSettings(); }
@@ -647,8 +648,8 @@ class MainForm : Form
         Controls.Add(timeSlider);
 
         modePills = new Pill[3];
-        string[] modes = new string[] { "brief", "ai", "both" };
-        string[] labels = new string[] { "简洁描述", "AI联动分析", "两个都要" };
+        string[] modes = new string[] { "brief", "full", "both" };
+        string[] labels = new string[] { "简洁描述", "完全记录", "两个都要" };
         for (int i = 0; i < 3; i++)
         {
             string value = modes[i];
@@ -706,7 +707,7 @@ class MainForm : Form
         if (timeSlider != null) timeSlider.Value = TimeLimitSec;
         if (modePills != null)
         {
-            string[] modes = new string[] { "brief", "ai", "both" };
+            string[] modes = new string[] { "brief", "full", "both" };
             for (int i = 0; i < modePills.Length; i++) modePills[i].Selected = modes[i] == ArchiveMode;
         }
         if (archiveToggle != null)
