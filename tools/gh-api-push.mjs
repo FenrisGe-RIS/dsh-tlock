@@ -78,6 +78,7 @@ async function ensureRef(ref, sha) {
   }
 }
 await ensureRef('refs/heads/main', commit.sha)
-await ensureRef('refs/tags/v0.2.1', commit.sha)
+const VERSION = JSON.parse(fs.readFileSync('package.json', 'utf8')).version
+await ensureRef('refs/tags/v' + VERSION, commit.sha)
 console.log('==> main 与 v0.2.1 已创建')
 console.log(`https://github.com/${OWNER}/${REPO}/tree/${commit.sha}`)
